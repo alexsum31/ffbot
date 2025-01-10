@@ -6,14 +6,12 @@ import os
 from pathlib import Path
 import re
 from io import StringIO,BytesIO
-import base64
 import math
-import imghdr
 import datetime
 #from stqdm import stqdm
 from time import sleep
 from  streamlit_vertical_slider import vertical_slider
-
+import base64
 
 def load_image(image_file):
 	#img = Image.open(image_file).convert("RGB")
@@ -280,25 +278,18 @@ def page2():
         zipfilename='Reszied_img_'+ suffixA +'.zip'
   
         if st.sidebar.button('Download all file in zip',key='we9031'):
-            packagezip(fileoutimg,key_list,zipfilepath,zipfilepath+zipfilename,) 
+            b64=packagezip(fileoutimg,key_list,zipfilepath,zipfilepath+zipfilename,) 
          
-            with open(zipfilepath+zipfilename, "rb") as file:
-                    st.sidebar.download_button(
-                        label="Download zip",
-                        data=file,
-                        file_name=zipfilename,
-                        mime="application/zip",
-                        type="primary"
-                    )
+            href = f'<a href=\"data:file/zip;base64,{b64}\" download="{zipfilename}">Click Here To download</a>'
+            st.markdown(href, unsafe_allow_html=True)
                             
 def packagezip(uploadfile,indivi_filename,zipfilepath,zip_file_name):
     import zipfile
+    zip_buf=BytesIO()
     
-    with zipfile.ZipFile(zip_file_name, 'w') as zipf:
+    with zipfile.ZipFile(zip_buf, 'w') as zipf:
         for idx, url in enumerate(uploadfile):
-         #for idx, url in enumerate(stqdm(range(len(uploadfile)), st_container=st.sidebar)): 
-         #for _ in enumerate(stqdm(range(len(uploadfile)), st_container=st.sidebar)):
-         #   sleep(1)
+
             main, file_extension = os.path.splitext(indivi_filename[idx])
             n_filename = "".join([main,'.jpg'])#file_extension
            
@@ -308,8 +299,8 @@ def packagezip(uploadfile,indivi_filename,zipfilepath,zip_file_name):
                     zipf.write(os.path.join(zipfilepath ,n_filename),n_filename)
             except Exception as e:
                  print(f"無法下載或添加文件 {n_filename}：{e}")     
-            finally:
-                 os.remove(os.path.join(zipfilepath ,n_filename))
+    zip_buf.seek(0)
+    return base64.b64encode(zip_buf.read()).decode()
         
 
     
