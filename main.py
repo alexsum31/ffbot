@@ -11,6 +11,6 @@ pages = {
 
 if __name__ == "__main__":
     st.set_page_config(layout="wide",
-                   page_title='internal Apps')
+                   page_title='ffbot')
     pg = st.navigation(pages)
     pg.run()
