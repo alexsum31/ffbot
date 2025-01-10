@@ -233,7 +233,7 @@ def byte2size(file_size):
         
 def page2():
     st.header("Product Image Converter (Batch)", divider='rainbow')
-    MAX_LINES = 100
+    MAX_LINES = 20
     st.caption(f'Maxmium upload to {MAX_LINES} images per batch')
     
     if 'batch_num' not in st.session_state:
