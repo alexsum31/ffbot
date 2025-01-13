@@ -159,7 +159,7 @@ def get_docx_download_link(docx):
 def app():
     savedatestr=datetime.date.today()
     T_today=savedatestr.strftime('%Y%m%d')
-    st.header('Golden Cosmetices Package Label',divider="rainbow")
+    st.header('Cosmetices Package Label',divider="rainbow")
     xls_file = st.file_uploader("Upload excel file",type=['.xlsx'])
     if xls_file:
         try:

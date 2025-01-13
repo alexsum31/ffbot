@@ -110,37 +110,12 @@ def multiple_replace(string, rep_dict):
     pattern = re.compile("|".join([re.escape(k) for k in sorted(rep_dict,key=len,reverse=True)]), flags=re.DOTALL)
     return pattern.sub(lambda x: rep_dict[x.group(0)], string)
 
-def makebeauty(filename):
-    T1=Path(os.path.join(filename)).stem
-    d = { "'":'',
-         '(7+1)_':'',
-         '.1':'',
-         '.2':'',
-        '.3':'',
-        '.4':'',
-        '.5':''
-         }
-    B2=multiple_replace(T1, d)
-    FBeauty= B2
-    return FBeauty
     
 def get_image_download_link(img,qat=100):
     buffered = BytesIO()
     img.save(buffered, format="JPEG",quality=qat, optimize=True)
     return buffered.getvalue()
 
-def filenamemapping(imagefileN):
-    try:
-        Dataexl2=open('data/photoconveter/beautycore.xlsx','rb')
-        fileNamebeauty=makebeauty(imagefileN)
-        dataCore=pd.read_excel(Dataexl2,sheet_name='DataSH')
-        cond = (dataCore['Barcode'] == fileNamebeauty)
-        titleF = dataCore[cond].output.values[0]
-        FF_productN = dataCore[cond].ProductName.values[0]
-    except:
-        titleF='Err'
-        FF_productN='Excel file not found'
-    return titleF, FF_productN
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -273,17 +248,18 @@ def page2():
             with cols[checknowcol]:
                     drawworkingarea(idx,uploaded_files,options,sampling_method,zoom_levels,updown_levels,fileoutimg,leftright_levels,quality_levels)
                 
-        zipfilepath='data/imgzip/'
+
         suffixA = datetime.datetime.now().strftime("%y%m%d%H%M%S")
         zipfilename='Reszied_img_'+ suffixA +'.zip'
   
         if st.sidebar.button('Download all file in zip',key='we9031'):
-            b64=packagezip(fileoutimg,key_list,zipfilepath,zipfilepath+zipfilename,) 
+            st.write(key_list)
+            b64=packagezip(fileoutimg,key_list,zipfilename,) 
          
             href = f'<a href=\"data:file/zip;base64,{b64}\" download="{zipfilename}">Click Here To download</a>'
             st.markdown(href, unsafe_allow_html=True)
                             
-def packagezip(uploadfile,indivi_filename,zipfilepath,zip_file_name):
+def packagezip(uploadfile,indivi_filename,zip_file_name):
     import zipfile
     zip_buf=BytesIO()
     
@@ -294,9 +270,9 @@ def packagezip(uploadfile,indivi_filename,zipfilepath,zip_file_name):
             n_filename = "".join([main,'.jpg'])#file_extension
            
             try:
-                 with open(os.path.join(zipfilepath ,n_filename),"wb") as f:
+                 with open(n_filename,"wb") as f:
                     f.write(get_image_download_link(uploadfile[idx]))   
-                    zipf.write(os.path.join(zipfilepath ,n_filename),n_filename)
+                    zipf.write(n_filename,n_filename)
             except Exception as e:
                  print(f"無法下載或添加文件 {n_filename}：{e}")     
     zip_buf.seek(0)
