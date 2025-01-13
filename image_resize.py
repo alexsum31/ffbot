@@ -255,9 +255,9 @@ def page2():
         if st.sidebar.button('Download all file in zip',key='we9031'):
             st.write(key_list)
             b64=packagezip(fileoutimg,key_list,zipfilename,) 
-         
+            #st.download_button('Download',data=b64,file_name=zipfilename,mime='application/zip')
             href = f'<a href=\"data:file/zip;base64,{b64}\" download="{zipfilename}">Click Here To download</a>'
-            st.markdown(href, unsafe_allow_html=True)
+            st.sidebar.markdown(href, unsafe_allow_html=True)
                             
 def packagezip(uploadfile,indivi_filename,zip_file_name):
     import zipfile
