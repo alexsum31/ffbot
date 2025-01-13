@@ -5,7 +5,8 @@ pages = {
     "outsourcing func": [
         st.Page("golden.py", title="Golden label"),
         st.Page("image_resize.py", title="Image Resize"),
-        st.Page("translate.py",title="Translate")
+        st.Page("translate.py",title="Translate"),
+        st.Page("file_converter.py",title="Pickme File converter")
     ],
 }
 
